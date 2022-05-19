@@ -29,10 +29,10 @@ const CardList = ({ cards, cardName }) => {
 
   return cards.map((val, idx) => {
     const cardID = JSON.stringify(val._id);
-    const index = val.index;
+    // const index = val.index;
     const isToggled = idx === toggledCard;
     return (
-      <Draggable key={cardID} draggableId={cardID} index={index}>
+      <Draggable key={cardID} draggableId={cardID} index={idx}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.draggableProps}>
             <Card

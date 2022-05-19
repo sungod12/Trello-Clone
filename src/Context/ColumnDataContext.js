@@ -58,7 +58,9 @@ export function ColumnProvider({ children }) {
         .post(`${url}/addColumn/${boardId}`, {
           column: newColumn.current,
         })
-        .then((res) => (res.data === "title exists" ? "" : fetch()));
+        .then((res) =>
+          res.data === "column already exists" ? "" : fetch(boardId)
+        );
     }
     newColumn.current = "";
   };

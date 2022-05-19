@@ -219,7 +219,13 @@ i {
   margin-right: 1rem;
 }
 
-.addbutton{
+.addbutton {
   margin-top: 1rem;
   align-self: baseline;
+}
+
+.input-box {
+  max-height: 25px;
+  margin-inline-start: 10px;
+  margin-block-start: 1rem;
 }

@@ -13,7 +13,7 @@ const Columns = () => {
   return columns.map((val, index) => {
     const isToggledColumn = index === toggledColumnId;
     const isToggledCard = index === toggledCardId;
-    const { column: columnName } = val ? val : [];
+    const { column: columnName } = val ? val : "";
     const cards = val && val.cards ? val.cards : [];
     return (
       <Draggable draggableId={`${index}`} index={index} key={index}>
@@ -197,12 +197,14 @@ const ColumnList = () => {
                   }}
                   onMouseLeave={handleLeave}
                   required
+                  className="input-box"
                 />
               )}
               <button
                 type="button"
                 className="addbutton"
                 onClick={() => setHidden(!hidden)}
+                hidden={!hidden}
               >
                 + Add
               </button>

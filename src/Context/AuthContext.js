@@ -10,7 +10,8 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const history = useHistory();
-  const url = "http://localhost:3001";
+  const url = "https://trello-server12.herokuapp.com";
+  // const url = "http://localhost:3001";
   const axiosJWT = Axios.create();
   const [expired, setExpired] = useState(false);
 

@@ -7,8 +7,7 @@ function Header({ onBoard }) {
   const [title, setTitle] = useState("");
   const [isEditing, setEditing] = useState(false);
   const history = useHistory();
-  const { AToken, axiosJWT } = useAuth();
-  const url = "http://localhost:3001";
+  const { AToken, axiosJWT, url } = useAuth();
   const boardId = history.location.state;
 
   const updateBoardTitle = async (title) => {
