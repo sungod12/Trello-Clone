@@ -1,0 +1,33 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 320px;
+  width: 320px;
+  margin: 0 auto;
+  height: 100vh;
+}
+form > input {
+  padding: 15px;
+  border: 0.8px #818181 solid;
+}
+.userName {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.password {
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.title {
+  color: #000000;
+  text-align: center;
+}
+.signIn-button {
+  background-color: rgb(4, 126, 240);
+  color: #ffffff;
+  margin: 10px auto;
+  padding: 13px 5rem;
+  border-radius: 10px;
+}

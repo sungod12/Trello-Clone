@@ -10,8 +10,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const history = useHistory();
-  const url = "https://trello-server12.herokuapp.com";
-  // const url = "http://localhost:3001";
+  const url = process.env.REACT_APP_API_BASE_URL;
   const axiosJWT = Axios.create();
   const [expired, setExpired] = useState(false);
 
@@ -77,17 +76,29 @@ export function AuthProvider({ children }) {
       const { token, status } = result.data;
       localStorage.setItem("AToken", token);
       if (status === "ok") {
-        history.push({
-          pathname: "/boards",
-        });
+        history.push("/boards");
       }
     } catch (error) {
       console.log(error);
     }
   };
 
+  const register = async (username, password) => {
+    const result = await Axios.post(`${url}/register`, {
+      username,
+      password,
+    }).then((res) => res);
+
+    if (result.data.status === "ok") {
+      // everything went fine
+      alert("Success");
+    } else {
+      alert(result.data.error);
+    }
+  };
   const value = {
     login,
+    register,
     AToken: localStorage.getItem("AToken"),
     url,
     axiosJWT,

@@ -1,46 +1,52 @@
-import React from "react";
-import Axios from "axios";
+import React, { useRef } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { Link } from "react-router-dom";
+import "../css/signIn.css";
 
 function Register() {
-  const { url } = useAuth();
+  const { register } = useAuth();
+  const username = useRef("");
+  const password = useRef("");
+
   async function registerUser(event) {
     event.preventDefault();
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
 
-    const result = await Axios.post(`${url}/register`, {
-      username,
-      password,
-    }).then((res) => res);
-
-    if (result.data.status === "ok") {
-      // everything went fine
-      alert("Success");
-    } else {
-      alert(result.data.error);
-    }
+    await register(username.current, password.current);
   }
 
   return (
-    <div>
-      <h1>Registration</h1>
-      <form id="reg-form" onSubmit={registerUser}>
-        <input
-          type="text"
-          autoComplete="off"
-          id="username"
-          placeholder="Username"
-        />
-        <input
-          type="password"
-          autoComplete="off"
-          id="password"
-          placeholder="Password"
-        />
-        <input type="submit" value="Submit Form" />
-      </form>
-    </div>
+    <form onSubmit={registerUser} className="login-container">
+      <h1 className="title">Register</h1>
+      <input
+        type="text"
+        name="username"
+        className="userName"
+        ref={username}
+        onChange={(e) => {
+          username.current = e.target.value;
+        }}
+        placeholder="Username"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        className="password"
+        ref={password}
+        autoComplete="false"
+        placeholder="Password"
+        onChange={(e) => {
+          password.current = e.target.value;
+        }}
+        required
+      />
+      <button type="submit" className="signIn-button">
+        Submit
+      </button>
+      <Link to="/login" style={{ margin: "0 auto" }}>
+        Already Registered? Click here
+      </Link>
+    </form>
   );
 }
 

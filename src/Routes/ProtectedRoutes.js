@@ -1,20 +1,8 @@
 import React from "react";
 import { Route } from "react-router";
 import { Redirect } from "react-router-dom";
-// import { useAuth } from "../Context/AuthContext";
 
 function ProtectedRoutes({ component: Component, ...rest }) {
-  // const { axiosJWT, url } = useAuth();
-  // const logout = async (AToken) => {
-  //   try {
-  //     await axiosJWT.post(`${url}/logout`, {
-  //       token: AToken,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   return (
     <Route
       {...rest}
@@ -23,11 +11,8 @@ function ProtectedRoutes({ component: Component, ...rest }) {
         if (AToken) {
           return <Component />;
         } else {
-          // logout(AToken);
-          // localStorage.clear();
-          // return setTimeout(() =>
+          localStorage.clear();
           return <Redirect to="/login" />;
-          // , 5000);
         }
       }}
     />
