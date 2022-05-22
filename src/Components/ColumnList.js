@@ -148,13 +148,14 @@ const ColumnList = () => {
   } = useColumnData();
 
   const { id, color } = history.location.state;
+  const { checkExpiry } = useAuth();
 
   const onDragEnd = (e) => {
     // console.log(e);
     const { source, destination } = e;
     const draggedColumn = columns.splice(source.index, 1);
     columns.splice(destination.index, 0, ...draggedColumn);
-    updateColumns(columns, id);
+    checkExpiry(() => updateColumns(columns, id));
   };
 
   const setBoardColor = () => {
@@ -162,7 +163,7 @@ const ColumnList = () => {
   };
 
   useLayoutEffect(() => {
-    fetch(id);
+    checkExpiry(() => fetch(id));
     setBoardColor();
     return () =>
       (document.getElementsByTagName("body")[0].style.backgroundColor =
@@ -171,7 +172,7 @@ const ColumnList = () => {
   }, []);
 
   const handleLeave = () => {
-    addColumn(id);
+    checkExpiry(() => addColumn(id));
   };
 
   return (

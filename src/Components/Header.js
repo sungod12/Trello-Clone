@@ -7,7 +7,7 @@ function Header({ onBoard }) {
   const [title, setTitle] = useState("");
   const [isEditing, setEditing] = useState(false);
   const history = useHistory();
-  const { AToken, axiosJWT, url } = useAuth();
+  const { AToken, axiosJWT, url, checkExpiry } = useAuth();
   const boardId = history.location.state;
 
   const updateBoardTitle = async (title) => {
@@ -23,14 +23,14 @@ function Header({ onBoard }) {
   };
 
   useLayoutEffect(() => {
-    getBoardTitle();
+    checkExpiry(getBoardTitle);
     return () => setTitle("");
     // eslint-disable-next-line
   }, []);
 
   useLayoutEffect(() => {
     const timer = setTimeout(() => {
-      getBoardTitle();
+      checkExpiry(getBoardTitle);
     }, 2000);
     if (!loading) clearTimeout(timer);
 
@@ -92,10 +92,10 @@ function Header({ onBoard }) {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              onMouseLeave={() => updateBoardTitle(title)}
+              onMouseLeave={() => checkExpiry(() => updateBoardTitle(title))}
             />
           ) : (
-            <p className="title">{title}</p>
+            <p className="boardTitle">{title}</p>
           )}
           <button
             type="button"

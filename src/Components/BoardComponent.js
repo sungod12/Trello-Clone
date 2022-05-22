@@ -11,7 +11,7 @@ function BoardComponent() {
   const [boards, setBoards] = useState([]);
   const [color, setColor] = useState("#1899cc");
   const [input, setInput] = useState("");
-  const { axiosJWT, url } = useAuth();
+  const { axiosJWT, url, checkExpiry } = useAuth();
   const history = useHistory();
 
   const addBoard = async () => {
@@ -28,12 +28,12 @@ function BoardComponent() {
   };
 
   useLayoutEffect(() => {
-    getBoards();
+    checkExpiry(getBoards);
     // eslint-disable-next-line
   }, []);
 
   useLayoutEffect(() => {
-    if (added) addBoard();
+    if (added) checkExpiry(addBoard);
     // eslint-disable-next-line
   }, [added]);
 

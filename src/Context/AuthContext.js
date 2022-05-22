@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
+import React, { useContext } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
 const AuthContext = React.createContext();
@@ -12,60 +11,22 @@ export function AuthProvider({ children }) {
   const history = useHistory();
   const url = process.env.REACT_APP_API_BASE_URL;
   const axiosJWT = Axios.create();
-  const [expired, setExpired] = useState(false);
 
   axiosJWT.defaults.headers = {
     Authorization: `Bearer ${localStorage.getItem("AToken")}`,
   };
 
-  // const checkToken = async () => {
-  //   const res = await axiosJWT.post(`${url}/verify`);
-  //   const { message } = res.data;
-  //   // console.log(message);
-  //   if (message === "ok") {
-  //     return;
-  //   } else {
-  //     localStorage.removeItem("AToken");
-  //     history.push("/login");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     checkToken();
-  //   }, 1000);
-  //   return () => clearTimeout(timer);
-  //   // eslint-disable-next-line
-  // });
-
-  useEffect(() => {
-    const timer = setInterval(async () => {
-      // console.log("running");
-      let currentDate = new Date();
-      const aToken = localStorage.getItem("AToken");
-      try {
-        const data = jwt_decode(aToken);
-        // console.log(data);
-        if (data.exp * 1000 < currentDate.getTime()) {
-          console.log("expired");
-          setExpired(true);
-          localStorage.clear();
-          history.replace("/login");
-          const res = await axiosJWT.post(`${url}/logout`);
-          alert(res.data.message);
-        }
-      } catch (err) {
-        return;
-      }
-    }, 10000);
-    // clearInterval(timer);
-    return () => {
-      // setExpired(false);
-      clearInterval(timer);
-    };
-
-    // eslint-disable-next-line
-  }, [expired]);
+  const checkExpiry = async (next) => {
+    const response = await axiosJWT.get(`${url}/verify`);
+    if (response.data.message === "ok") next();
+    else {
+      await axiosJWT.post(`${url}/logout`, {
+        token: localStorage.getItem("AToken"),
+      });
+      localStorage.clear();
+      history.replace("/login");
+    }
+  };
 
   const login = async (username, password) => {
     try {
@@ -102,6 +63,7 @@ export function AuthProvider({ children }) {
     AToken: localStorage.getItem("AToken"),
     url,
     axiosJWT,
+    checkExpiry,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
