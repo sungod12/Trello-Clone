@@ -8,7 +8,7 @@ export const useColumnData = () => {
 };
 
 export function ColumnProvider({ children }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const newColumn = useRef("");
   const [columns, setColumns] = useState([]);
   const [toggledColumnId, setToggledColumnId] = useState("");
@@ -22,13 +22,11 @@ export function ColumnProvider({ children }) {
 
   // console.log(boardId);
 
-  const fetch = (boardId) => {
+  const fetch = async (boardId) => {
     if (boardId) {
-      axiosJWT.get(`${url}/getData/${boardId}`).then((res) => {
-        setColumns(res.data.items);
-      });
+      const response = await axiosJWT.get(`${url}/getData/${boardId}`);
+      setColumns(response.data.items);
     }
-
     setLoading(false);
   };
 
@@ -95,7 +93,6 @@ export function ColumnProvider({ children }) {
     fetch,
     setColumns,
     updateColumns,
-    setLoading,
   };
 
   return (

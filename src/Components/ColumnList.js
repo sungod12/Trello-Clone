@@ -136,6 +136,7 @@ const Column = ({
 
 const ColumnList = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState(true);
 
   const {
     fetch,
@@ -165,6 +166,7 @@ const ColumnList = () => {
   useLayoutEffect(() => {
     checkExpiry(() => fetch(id));
     setBoardColor();
+    setTimeout(() => setLoading(false), 3000);
     return () =>
       (document.getElementsByTagName("body")[0].style.backgroundColor =
         "initial");
@@ -175,7 +177,9 @@ const ColumnList = () => {
     checkExpiry(() => addColumn(id));
   };
 
-  return (
+  return loading ? (
+    <h1 className="loading-screen-placeholder">Loading...</h1>
+  ) : (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable_area" direction="horizontal">
         {(provided) => (

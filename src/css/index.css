@@ -229,3 +229,23 @@ i {
   margin-inline-start: 10px;
   margin-block-start: 1rem;
 }
+
+.loading-screen-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  animation: animate-loading 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes animate-loading {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}

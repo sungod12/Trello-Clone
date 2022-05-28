@@ -9,31 +9,35 @@ function BoardComponent() {
   const [added, setAdded] = useState(false);
   const backgrounds = ["#9acd32", "#1899cc", "#00ffff", "#8a2be2"];
   const [boards, setBoards] = useState([]);
-  const [color, setColor] = useState("#1899cc");
+  const [color, setColor] = useState(backgrounds[1]);
   const [input, setInput] = useState("");
   const { axiosJWT, url, checkExpiry } = useAuth();
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
 
   const addBoard = async () => {
     await axiosJWT.post(`${url}/addBoard`, {
       boards: boards,
     });
-    getBoards();
+    checkExpiry(() => getBoards());
   };
 
   const getBoards = async () => {
     const response = await axiosJWT.get(`${url}/getBoards`);
     setBoards(response.data.boardData);
+    setTimeout(() => setLoading(false), 3000);
     setAdded(false);
   };
 
   useLayoutEffect(() => {
     checkExpiry(getBoards);
+    return () => setLoading(false);
     // eslint-disable-next-line
   }, []);
 
   useLayoutEffect(() => {
     if (added) checkExpiry(addBoard);
+    return () => setLoading(false);
     // eslint-disable-next-line
   }, [added]);
 
@@ -51,7 +55,11 @@ function BoardComponent() {
     setAdded(true);
   };
 
-  return (
+  return loading ? (
+    <>
+      <h1 className="loading-screen-placeholder">Loading...</h1>
+    </>
+  ) : (
     <>
       <Header onBoard={onBoard} setonBoard={setonBoard} />
       <div className="hero-container">
@@ -88,7 +96,6 @@ function BoardComponent() {
           Create new board.
         </button>
       </div>
-
       <div
         id="myModal"
         className="modal"
@@ -107,7 +114,7 @@ function BoardComponent() {
                 }}
               ></input>
               <p style={{ color: "white", fontWeight: "500" }}>
-                Suraj's Workspace
+                Your Workspace
               </p>
             </div>
             <button
