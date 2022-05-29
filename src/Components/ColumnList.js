@@ -166,7 +166,7 @@ const ColumnList = () => {
   useLayoutEffect(() => {
     checkExpiry(() => fetch(id));
     setBoardColor();
-    setTimeout(() => setLoading(false), 3000);
+    setTimeout(() => setLoading(false), 3500);
     return () =>
       (document.getElementsByTagName("body")[0].style.backgroundColor =
         "initial");

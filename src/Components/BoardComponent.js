@@ -25,7 +25,7 @@ function BoardComponent() {
   const getBoards = async () => {
     const response = await axiosJWT.get(`${url}/getBoards`);
     setBoards(response.data.boardData);
-    setTimeout(() => setLoading(false), 3000);
+    setTimeout(() => setLoading(false), 3500);
     setAdded(false);
   };
 
