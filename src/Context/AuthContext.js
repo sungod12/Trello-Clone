@@ -16,9 +16,9 @@ export function AuthProvider({ children }) {
     Authorization: `Bearer ${localStorage.getItem("AToken")}`,
   };
 
-  const checkExpiry = async (next) => {
+  const checkExpiry = async () => {
     const response = await axiosJWT.get(`${url}/verify`);
-    if (response.data.message === "ok") next();
+    if (response.data.message === "ok") return;
     else {
       await axiosJWT.post(`${url}/logout`, {
         token: localStorage.getItem("AToken"),
@@ -29,19 +29,13 @@ export function AuthProvider({ children }) {
   };
 
   const login = async (username, password) => {
-    try {
-      const result = await axiosJWT.post(`${url}/login`, {
-        username,
-        password,
-      });
-      const { token, status } = result.data;
-      localStorage.setItem("AToken", token);
-      if (status === "ok") {
-        history.push("/boards");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    const result = await axiosJWT.post(`${url}/login`, {
+      username,
+      password,
+    });
+    const { token, status } = result.data;
+    if (status === "ok") localStorage.setItem("AToken", token);
+    return result.data;
   };
 
   const register = async (username, password) => {
@@ -52,9 +46,9 @@ export function AuthProvider({ children }) {
 
     if (result.data.status === "ok") {
       // everything went fine
-      alert("Success");
+      return "Success";
     } else {
-      alert(result.data.error);
+      return result.data.error;
     }
   };
   const value = {

@@ -73,11 +73,12 @@ i {
   outline: none;
 }
 .changeTitleinput {
-  /* margin: 0.5rem 0; */
-  width: 7rem;
+  width: 7.5rem;
   overflow: clip;
   font-size: medium;
   border: none;
+  padding: 7px 10px;
+  border-radius: 10px;
   outline: none;
 }
 .droppable {
@@ -213,9 +214,11 @@ i {
 .create-board-button {
   background-color: #8080802d;
   width: 14rem;
+  border-radius: 4px;
+  font-weight: 500;
   padding: 3rem 2rem;
   margin: 0;
-  margin-top: 1rem;
+
   margin-right: 1rem;
 }
 
@@ -236,6 +239,73 @@ i {
   justify-content: center;
   height: 100vh;
   animation: animate-loading 2.5s infinite alternate ease-in-out;
+}
+
+.toast {
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #333; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+  -webkit-animation: fadein 0.5s;
+  animation: fadein 0.5s;
+}
+
+.shimmer {
+  color: grey;
+  -webkit-mask: linear-gradient(60deg, #000 30%, #0005, #000 70%) right/300%
+    100%;
+  mask: linear-gradient(60deg, #000 30%, #0005, #000 70%) right/300% 100%;
+  background-repeat: no-repeat;
+  animation: shimmer 2.5s infinite;
+  font-size: 50px;
+  max-width: 250px;
+  padding: 3.69rem 3.8rem;
+}
+
+.board-screen-title {
+  padding: 0.8rem;
+}
+
+.board-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  row-gap: 1rem;
+}
+@keyframes shimmer {
+  100% {
+    -webkit-mask-position: left;
+    mask-position: left;
+  }
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
 }
 
 @keyframes animate-loading {

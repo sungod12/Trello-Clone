@@ -1,4 +1,4 @@
-.login-container {
+.form-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -24,7 +24,7 @@ form > input {
   color: #000000;
   text-align: center;
 }
-.signIn-button {
+.submit-button {
   background-color: rgb(4, 126, 240);
   color: #ffffff;
   margin: 10px auto;

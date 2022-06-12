@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useAuth } from "./AuthContext";
 
 const ColumnContext = React.createContext();
@@ -8,7 +8,6 @@ export const useColumnData = () => {
 };
 
 export function ColumnProvider({ children }) {
-  const [loading, setLoading] = useState(true);
   const newColumn = useRef("");
   const [columns, setColumns] = useState([]);
   const [toggledColumnId, setToggledColumnId] = useState("");
@@ -20,14 +19,11 @@ export function ColumnProvider({ children }) {
     setToggledColumnId(id);
   }
 
-  // console.log(boardId);
-
   const fetch = async (boardId) => {
     if (boardId) {
       const response = await axiosJWT.get(`${url}/getData/${boardId}`);
       setColumns(response.data.items);
     }
-    setLoading(false);
   };
 
   const updateColumns = async (newColumns, boardId) => {
@@ -62,23 +58,6 @@ export function ColumnProvider({ children }) {
     }
     newColumn.current = "";
   };
-
-  useEffect(() => {
-    fetch();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetch();
-    }, 500);
-    if (!loading) clearTimeout(timer);
-
-    return () => {
-      setLoading(false);
-    };
-    // eslint-disable-next-line
-  }, [loading]);
 
   const value = {
     columns,

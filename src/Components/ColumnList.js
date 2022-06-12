@@ -6,7 +6,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useHistory } from "react-router-dom";
 import Header from "./Header";
 
-const Columns = () => {
+const Columns = ({ boardId }) => {
   const [toggledCardId, setToggledCardId] = useState("");
   const { columns, toggledColumnId } = useColumnData();
 
@@ -34,6 +34,7 @@ const Columns = () => {
                       name={columnName}
                       cards={cards}
                       index={index}
+                      boardId={boardId}
                       setToggledCardId={setToggledCardId}
                       toggledCardId={toggledCardId}
                     />
@@ -59,6 +60,7 @@ const Column = ({
   index,
   setToggledCardId,
   toggledCardId,
+  boardId,
 }) => {
   const {
     setToggledColumnId,
@@ -68,13 +70,13 @@ const Column = ({
     columns,
   } = useColumnData();
 
-  const { axiosJWT } = useAuth();
+  const { axiosJWT, url } = useAuth();
   const cardName = useRef("");
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
     cardName.current = "";
-    if (added) fetch();
+    if (added) fetch(boardId);
 
     setAdded(false);
     // eslint-disable-next-line
@@ -83,7 +85,7 @@ const Column = ({
   const AddCard = async () => {
     setToggledCardId("");
     if (cardName.current !== "")
-      await axiosJWT.post("http://localhost:3001/addCard", {
+      await axiosJWT.post(`${url}/addCard`, {
         card: cardName.current,
         column: columns[toggledCardId].column,
       });
@@ -149,14 +151,13 @@ const ColumnList = () => {
   } = useColumnData();
 
   const { id, color } = history.location.state;
-  const { checkExpiry } = useAuth();
 
   const onDragEnd = (e) => {
     // console.log(e);
     const { source, destination } = e;
     const draggedColumn = columns.splice(source.index, 1);
     columns.splice(destination.index, 0, ...draggedColumn);
-    checkExpiry(() => updateColumns(columns, id));
+    updateColumns(columns, id);
   };
 
   const setBoardColor = () => {
@@ -164,7 +165,7 @@ const ColumnList = () => {
   };
 
   useLayoutEffect(() => {
-    checkExpiry(() => fetch(id));
+    fetch(id);
     setBoardColor();
     setTimeout(() => setLoading(false), 3500);
     return () =>
@@ -174,7 +175,7 @@ const ColumnList = () => {
   }, []);
 
   const handleLeave = () => {
-    checkExpiry(() => addColumn(id));
+    addColumn(id);
   };
 
   return loading ? (
@@ -190,7 +191,7 @@ const ColumnList = () => {
               ref={provided.innerRef}
               className="droppable"
             >
-              <Columns />
+              <Columns boardId={id} />
               {provided.placeholder}
               {hidden ? (
                 ""
@@ -222,5 +223,3 @@ const ColumnList = () => {
 };
 
 export default ColumnList;
-
-// eslint-disable-next-line

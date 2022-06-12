@@ -7,11 +7,11 @@ function Header({ onBoard }) {
   const [title, setTitle] = useState("");
   const [isEditing, setEditing] = useState(false);
   const history = useHistory();
-  const { AToken, axiosJWT, url, checkExpiry } = useAuth();
+  const { AToken, axiosJWT, url } = useAuth();
   const boardId = history.location.state;
 
   const updateBoardTitle = async (title) => {
-    setEditing(false);
+    setTimeout(() => setEditing(false), 1000);
     const response = await axiosJWT.put(
       `${url}/updateBoardTitle/${boardId.id}`,
       {
@@ -19,21 +19,11 @@ function Header({ onBoard }) {
       }
     );
     if (response.message === "successfully updated Title") setLoading(true);
-    else return;
+    return;
   };
 
   useLayoutEffect(() => {
-    checkExpiry(getBoardTitle);
-    return () => setTitle("");
-    // eslint-disable-next-line
-  }, []);
-
-  useLayoutEffect(() => {
-    const timer = setTimeout(() => {
-      checkExpiry(getBoardTitle);
-    }, 2000);
-    if (!loading) clearTimeout(timer);
-
+    getBoardTitle();
     return () => setLoading(true);
     // eslint-disable-next-line
   }, [loading]);
@@ -92,7 +82,7 @@ function Header({ onBoard }) {
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              onMouseLeave={() => checkExpiry(() => updateBoardTitle(title))}
+              onMouseLeave={() => updateBoardTitle(title)}
             />
           ) : (
             <p className="boardTitle">{title}</p>
